@@ -1,0 +1,30 @@
+name: Check Status
+on:
+  schedule:
+    # Every Day At 04:00
+    - cron: '0 4 * * *'
+  workflow_dispatch:
+jobs:
+  check-status:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: Check Status
+        env :
+          SLACK_URL: ${{ secrets.SLACK_URL }}
+        run : |
+          node ./.github/workflows/check-status.js
+      - name: Commit README.md
+        uses: EndBug/add-and-commit@v4.4.0
+        with:
+          add: './README.md'
+          author_name: Neos21
+          author_email: neos21@gmail.com
+          message: 'Auto Update README.md'
+        env :
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
