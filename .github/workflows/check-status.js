@@ -8,6 +8,7 @@ const https = require('https');
 
 /** サイト定義 */
 const sites = [
+  { name: "Neo's World", https: 'neos21.net'   , http: 'neo.s21.xrea.com', statusJsonPath: '/status.json' },
   { name: "Neo's World", https: 'neos21.tk'    , http: 'neo.s21.xrea.com', statusJsonPath: '/status.json' },
   { name: 'GCE'        , https: 'neos21-gce.ga', http: '35.197.103.64'   , statusJsonPath: '/status.json' },
   { name: 'OCI 1'      , https: 'neos21-oci.cf', http: '140.238.56.203'  , statusJsonPath: '/status.json' },
@@ -81,7 +82,11 @@ function request(url, options) {
 async function fetchInfo(site) {
   try {
     const rawHttpsStatus = await request(`https://${site.https}${site.statusJsonPath}`);
-    const httpsStatus = JSON.parse(rawHttpsStatus);
+    let httpsStatus = JSON.parse(rawHttpsStatus);
+    // Neo's World は現状2つドメインがあるので区別する
+    if(Array.isArray(httpsStatus)) {
+      httpsStatus = httpsStatus.find((status) => status.domain_name === site.https);
+    }
     console.log('Fetch Status : Success With HTTPS (OK)', httpsStatus);
     return {
       site   : site,
@@ -96,7 +101,11 @@ async function fetchInfo(site) {
   
   try {
     const rawHttpStatus = await request(`https://${site.http}${site.statusJsonPath}`);
-    const httpStatus = JSON.parse(rawHttpStatus);
+    let httpStatus = JSON.parse(rawHttpStatus);
+    // Neo's World は現状2つドメインがあるので区別する
+    if(Array.isArray(httpStatus)) {
+      httpStatus = httpStatus.find((status) => status.domain_name === site.https);
+    }
     console.log('Fetch Status : Success With HTTP (Warning)', httpStatus);
     return {
       site   : site,
@@ -210,12 +219,12 @@ function createReadmeText(todayString, infos) {
 
 ## Author
 
-[Neo](http://neo.s21.xrea.com/)
+[Neo](https://neos21.net/)
 
 
 ## Links
 
-- [Neo's World](http://neo.s21.xrea.com/)
+- [Neo's World](https://neos21.net/)
 - [Corredor](https://neos21.hatenablog.com/)
 - [Murga](https://neos21.hatenablog.jp/)
 - [El Mylar](https://neos21.hateblo.jp/)
