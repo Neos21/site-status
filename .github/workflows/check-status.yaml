@@ -1,8 +1,8 @@
 name: Check Status
 on:
   schedule:
-    # Every Day At 04:00
-    - cron: '0 4 * * *'
+    # Every Day At 03:00 JST
+    - cron: '0 18 * * *'
   workflow_dispatch:
 jobs:
   check-status:
