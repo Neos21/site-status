@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Google Search Console -->
+    <meta name="google-site-verification" content="ls7kuvIKSqVa_dcixqKvFwl393swvYMkHCkG-xtlCj0">
+    <title>Site Status</title>
+    <link rel="icon" href="https://neos21.github.io/favicon.ico">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@neos21/neos-normalize@2.0.1/neos-normalize.min.css">
+    <!-- Global Site Tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LP3ZQV2R3M"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-LP3ZQV2R3M');gtag('config','UA-106501-6');</script>
+    <!-- Google AdSense -->
+    <script data-ad-client="ca-pub-6475907504235292" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked@1.2.5/marked.min.js"></script>
+    <style>
+
+body {
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+#container {
+  overflow-x: auto;
+}
+
+table {
+  white-space: nowrap;
+}
+
+    </style>
+    <script>
+
+document.addEventListener('DOMContentLoaded', () => {
+  fetch('https://neos21.github.io/site-status/README.md')
+    .then((response) => {
+      console.log('Response', response);
+      if(!response.ok) throw new Error(response);
+      return response.text();
+    })
+    .then((text) => {
+      console.log('Text', text);
+      if(!text.match('Site Status')) throw new Error('Invalid Response');
+      document.getElementById('container').innerHTML = marked(text);
+    })
+    .catch((error) => {
+      console.error('Error', error);
+      document.getElementById('message').innerHTML = '<span style="color: #f00; font-weight: bold;">Error</span>';
+    });
+});
+
+    </script>
+  </head>
+  <body>
+    <div id="container">
+      <h1>Site Status</h1>
+      <p id="message">Loading...</p>
+      <h2>Links</h2>
+      <ul>
+        <li><a href="https://neos21.net/">Neo's World</a></li>
+        <li><a href="https://github.com/Neos21">GitHub - Neos21</a></li>
+        <li><a href="https://github.com/Neos21/site-status">GitHub - site-status</a></li>
+        <li><a href="https://neos21.github.io/site-status/">GitHub Pages - Site Status</a></li>
+      </ul>
+    </div>
+  </body>
+</html>

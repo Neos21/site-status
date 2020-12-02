@@ -221,6 +221,8 @@ function createReadmeText(todayString, infos) {
 
 - [Neo's World](https://neos21.net/)
 - [GitHub - Neos21](https://github.com/Neos21/)
+- [GitHub - site-status](https://github.com/Neos21/site-status)
+- [GitHub Pages - Site Status](https://neos21.github.io/site-status/)
 `;
   
   console.log('Readme Text : \n', readmeText);
