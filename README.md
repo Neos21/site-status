@@ -1,7 +1,7 @@
 # Site Status
 
 
-## Last Updated : 2021-03-31
+## Last Updated : 2021-04-01
 
 | Name | Neo's World | Neo's World | GCE | OCI 1 | OCI 2 |
 |------|---|---|---|---|---|
@@ -11,10 +11,10 @@
 | Message                  | HTTPS Is Alive | HTTPS Is Alive | HTTPS Is Alive | HTTPS Is Alive | HTTPS Is Alive |
 | Domain Registration Date | 2020-11-01 | 2020-08-22 | 2020-05-27 | 2020-08-22 | 2020-08-22 |
 | Domain Expiry Date       | 2021-11-01 | 2021-08-22 | 2021-05-27 | 2021-08-22 | 2021-08-22 |
-| Domain Days Left         | 215 | 144 | 57 | 144 | 144 |
-| Cert Renew Date          | - | - | 2021-04-01 | 2021-04-01 | 2021-03-23 |
+| Domain Days Left         | 214 | 143 | 56 | 143 | 143 |
+| Cert Renew Date          | - | - | 2021-04-01 | 2021-04-01 | 2021-04-01 |
 | Cert Expiry Date         | - | - | 2021-05-01 | 2021-06-19 | 2021-06-20 |
-| Cert Days Left           | - | - | 31 | 80 | 81 |
+| Cert Days Left           | - | - | 30 | 79 | 80 |
 
 
 ## Links
