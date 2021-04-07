@@ -100,7 +100,7 @@ async function fetchInfo(site) {
   }
   
   try {
-    const rawHttpStatus = await request(`https://${site.http}${site.statusJsonPath}`);
+    const rawHttpStatus = await request(`http://${site.http}${site.statusJsonPath}`);
     let httpStatus = JSON.parse(rawHttpStatus);
     // Neo's World は現状2つドメインがあるので区別する
     if(Array.isArray(httpStatus)) {
