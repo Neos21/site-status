@@ -17,8 +17,8 @@ const sites = [
 
 /** 通知を行う有効期限日までの残日数 */
 const expireDaysToNotify = {
-  domain: 30,
-  cert  : 10
+  domain: 15,  // Freenom の無料ドメインは14日前から更新可能なので大体コレぐらいで…
+  cert  : 20   // XREA 以外は毎月1日に更新する Cron 設定にしてあるので大体コレぐらいで…
 };
 
 
