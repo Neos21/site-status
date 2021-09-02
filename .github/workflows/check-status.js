@@ -10,7 +10,7 @@ const https = require('https');
 const sites = [
   { name: "Neo's World", https: 'neos21.net'   , http: 'neo.s21.xrea.com', statusJsonPath: '/status.json' },
   { name: "Neo's World", https: 'neos21.tk'    , http: 'neo.s21.xrea.com', statusJsonPath: '/status.json' },
-  { name: 'GCE'        , https: 'neos21-gce.ga', http: '35.197.103.64'   , statusJsonPath: '/status.json' },
+  { name: 'GCE'        , https: 'neos21-gce.ga', http: '35.197.103.64'   , statusJsonPath: '/status.json' },  // GCE は 2021-09-03 から常時稼動させないことにしたのでチェック対象外とする
   { name: 'OCI 1'      , https: 'neos21-oci.cf', http: '140.238.56.203'  , statusJsonPath: '/status.json' },
   { name: 'OCI 2'      , https: 'neos21-oci.ml', http: '158.101.130.242' , statusJsonPath: '/status.json' }
 ];
@@ -80,6 +80,21 @@ function request(url, options) {
  * @return {object} ヘルス・メッセージ・ステータスを持つ連想配列
  */
 async function fetchInfo(site) {
+  // GCE は 2021-09-03 から常時稼動させないことにしたのでチェック対象外とする
+  if(site.name === 'GCE') {
+    return {
+      site   : site,
+      health : 'OK',
+      message: 'GCE Is Not Checked',
+      status : {
+        domain_registration_date: 'UNKNOWN',
+        domain_expiry_date      : 'UNKNOWN',
+        cert_renew_date         : 'UNKNOWN',
+        cert_expiry_date        : 'UNKNOWN'
+      }
+    };
+  }
+  
   try {
     const rawHttpsStatus = await request(`https://${site.https}${site.statusJsonPath}`);
     let httpsStatus = JSON.parse(rawHttpsStatus);
@@ -204,16 +219,16 @@ function createReadmeText(todayString, infos) {
   const readmeText = `# Site Status\n\n\n## Last Updated : ${todayString}\n`
     + '\n' + infos.reduce((line, info) => line + ` ${info.site.name} |`, '| Name |')
     + '\n' + infos.reduce((line,_info) => line + '---|'                , '|------|')
-    + '\n' + infos.reduce((line, info) => line + ` [${info.site.http}](http://${info.site.http}/)`                          + ' |', '| Global IP                |')
-    + '\n' + infos.reduce((line, info) => line + ` [${info.site.https}](http://${info.site.https}/)`                        + ' |', '| Domain                   |')
-    + '\n' + infos.reduce((line, info) => line + ` ${emoji[info.health]} ${info.health}`                                    + ' |', '| Health                   |')
-    + '\n' + infos.reduce((line, info) => line + ` ${info.message}`                                                         + ' |', '| Message                  |')
-    + '\n' + infos.reduce((line, info) => line + ` ${info.status.domain_registration_date}`                                 + ' |', '| Domain Registration Date |')
-    + '\n' + infos.reduce((line, info) => line + ` ${info.status.domain_expiry_date}`                                       + ' |', '| Domain Expiry Date       |')
-    + '\n' + infos.reduce((line, info) => line + ` ${info.diff.domainShouldNotify ? '⚠️ ' : ''}${info.diff.domainDaysLeft}` + ' |', '| Domain Days Left         |')
-    + '\n' + infos.reduce((line, info) => line + ` ${info.status.cert_renew_date}`                                          + ' |', '| Cert Renew Date          |')
-    + '\n' + infos.reduce((line, info) => line + ` ${info.status.cert_expiry_date}`                                         + ' |', '| Cert Expiry Date         |')
-    + '\n' + infos.reduce((line, info) => line + ` ${info.diff.certShouldNotify ? '⚠️ ' : ''}${info.diff.certDaysLeft}`     + ' |', '| Cert Days Left           |')
+    + '\n' + infos.reduce((line, info) => line + ` [${info.site.http}](http://${info.site.http}/)`                                        + ' |', '| Global IP                |')
+    + '\n' + infos.reduce((line, info) => line + ` [${info.site.https}](http://${info.site.https}/)`                                      + ' |', '| Domain                   |')
+    + '\n' + infos.reduce((line, info) => line + ` ${emoji[info.health]} ${info.health}`                                                  + ' |', '| Health                   |')
+    + '\n' + infos.reduce((line, info) => line + ` ${info.message}`                                                                       + ' |', '| Message                  |')
+    + '\n' + infos.reduce((line, info) => line + ` ${info.status.domain_registration_date}`                                               + ' |', '| Domain Registration Date |')
+    + '\n' + infos.reduce((line, info) => line + ` ${info.status.domain_expiry_date}`                                                     + ' |', '| Domain Expiry Date       |')
+    + '\n' + infos.reduce((line, info) => line + ` ${info.diff.domainShouldNotify ? emoji.Warning + ' ' : ''}${info.diff.domainDaysLeft}` + ' |', '| Domain Days Left         |')
+    + '\n' + infos.reduce((line, info) => line + ` ${info.status.cert_renew_date}`                                                        + ' |', '| Cert Renew Date          |')
+    + '\n' + infos.reduce((line, info) => line + ` ${info.status.cert_expiry_date}`                                                       + ' |', '| Cert Expiry Date         |')
+    + '\n' + infos.reduce((line, info) => line + ` ${info.diff.certShouldNotify ? emoji.Warning + ' ' : ''}${info.diff.certDaysLeft}`     + ' |', '| Cert Days Left           |')
     + `
 
 
@@ -257,6 +272,9 @@ function updateReadme(readmeText) {
 function createMessageForSlack(todayString, infos) {
   let message = '';
   infos.forEach((info) => {
+    // GCE は 2021-09-03 から常時稼動させないことにしたのでチェック対象外とする
+    if(info.site.name === 'GCE') return;
+    
     let siteMessage = '';
     if(info.health !== 'OK') {
       siteMessage += `• ヘルス : ${info.health} (${info.message})\n`;
