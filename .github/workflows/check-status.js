@@ -8,11 +8,11 @@ const https = require('https');
 
 /** サイト定義 */
 const sites = [
-  { name: "Neo's World", https: 'neos21.net'   , http: 'neo.s21.xrea.com', statusJsonPath: '/status.json' },
-  { name: "Neo's World", https: 'neos21.tk'    , http: 'neo.s21.xrea.com', statusJsonPath: '/status.json' },
-  { name: 'GCE'        , https: 'neos21-gce.ga', http: '35.197.103.64'   , statusJsonPath: '/status.json' },  // GCE は 2021-09-03 から常時稼動させないことにしたのでチェック対象外とする
-  { name: 'OCI 1'      , https: 'neos21-oci.cf', http: '140.238.56.203'  , statusJsonPath: '/status.json' },
-  { name: 'OCI 2'      , https: 'neos21-oci.ml', http: '158.101.130.242' , statusJsonPath: '/status.json' }
+  { name: "Neo's World", https: 'neos21.net'   , http: 'neos21.github.io/neos21.net', statusJsonPath: '/status.json' },
+  { name: "Origin"     , https: 'neos21.tk'    , http: 'neo.s21.xrea.com'           , statusJsonPath: '/status.json' },
+  { name: 'GCE'        , https: 'neos21-gce.ga', http: '35.197.103.64'              , statusJsonPath: '/status.json' },  // GCE は 2021-09-03 から常時稼動させないことにしたのでチェック対象外とする
+  { name: 'OCI 1'      , https: 'neos21-oci.cf', http: '140.238.56.203'             , statusJsonPath: '/status.json' },
+  { name: 'OCI 2'      , https: 'neos21-oci.ml', http: '158.101.130.242'            , statusJsonPath: '/status.json' }
 ];
 
 /** 通知を行う有効期限日までの残日数 */
@@ -97,11 +97,7 @@ async function fetchInfo(site) {
   
   try {
     const rawHttpsStatus = await request(`https://${site.https}${site.statusJsonPath}`);
-    let httpsStatus = JSON.parse(rawHttpsStatus);
-    // Neo's World は現状2つドメインがあるので区別する
-    if(Array.isArray(httpsStatus)) {
-      httpsStatus = httpsStatus.find((status) => status.domain_name === site.https);
-    }
+    const httpsStatus = JSON.parse(rawHttpsStatus);
     console.log('Fetch Status : Success With HTTPS (OK)', httpsStatus);
     return {
       site   : site,
@@ -116,11 +112,7 @@ async function fetchInfo(site) {
   
   try {
     const rawHttpStatus = await request(`http://${site.http}${site.statusJsonPath}`);
-    let httpStatus = JSON.parse(rawHttpStatus);
-    // Neo's World は現状2つドメインがあるので区別する
-    if(Array.isArray(httpStatus)) {
-      httpStatus = httpStatus.find((status) => status.domain_name === site.https);
-    }
+    const httpStatus = JSON.parse(rawHttpStatus);
     console.log('Fetch Status : Success With HTTP (Warning)', httpStatus);
     return {
       site   : site,
