@@ -10,7 +10,6 @@ const https = require('https');
 const sites = [
   { name: "Neo's World", https: 'neos21.net'   , http: 'neos21.github.io/neos21.net', statusJsonPath: '/status.json' },
   { name: "Origin"     , https: 'neos21.tk'    , http: 'neo.s21.xrea.com'           , statusJsonPath: '/status.json' },
-  { name: 'GCE'        , https: 'neos21-gce.ga', http: '35.197.103.64'              , statusJsonPath: '/status.json' },  // GCE は 2021-09-03 から常時稼動させないことにしたのでチェック対象外とする
   { name: 'OCI 1'      , https: 'neos21-oci.cf', http: '140.238.56.203'             , statusJsonPath: '/status.json' },
   { name: 'OCI 2'      , https: 'neos21-oci.ml', http: '158.101.130.242'            , statusJsonPath: '/status.json' }
 ];
@@ -80,21 +79,6 @@ function request(url, options) {
  * @return {object} ヘルス・メッセージ・ステータスを持つ連想配列
  */
 async function fetchInfo(site) {
-  // GCE は 2021-09-03 から常時稼動させないことにしたのでチェック対象外とする
-  if(site.name === 'GCE') {
-    return {
-      site   : site,
-      health : 'OK',
-      message: 'GCE Is Not Checked',
-      status : {
-        domain_registration_date: 'UNKNOWN',
-        domain_expiry_date      : 'UNKNOWN',
-        cert_renew_date         : 'UNKNOWN',
-        cert_expiry_date        : 'UNKNOWN'
-      }
-    };
-  }
-  
   try {
     const rawHttpsStatus = await request(`https://${site.https}${site.statusJsonPath}`);
     const httpsStatus = JSON.parse(rawHttpsStatus);
