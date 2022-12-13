@@ -38,22 +38,21 @@ table {
     </style>
     <script>
 
-document.addEventListener('DOMContentLoaded', () => {
-  fetch('https://neos21.github.io/site-status/README.md')
-    .then((response) => {
-      console.log('Response', response);
-      if(!response.ok) throw new Error(response);
-      return response.text();
-    })
-    .then((text) => {
-      console.log('Text', text);
-      if(!text.match('Site Status')) throw new Error('Invalid Response');
-      document.getElementById('container').innerHTML = marked(text);
-    })
-    .catch((error) => {
-      console.error('Error', error);
-      document.getElementById('message').innerHTML = '<span style="color: #f00; font-weight: bold;">Error</span>';
-    });
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    const response = await window.fetch('https://neos21.github.io/site-status/README.md');
+    if(!response.ok) throw new Error(response);
+    
+    const text = await response.text();
+    if(!text.match('Site Status')) throw new Error('Invalid Response');
+    
+    const html = marked(text);
+    document.getElementById('container').innerHTML = html;
+  }
+  catch(error) {
+    console.error('Error', error);
+    document.getElementById('message').innerHTML = '<span style="color: #f00; font-weight: bold;">Error</span>';
+  }
 });
 
     </script>

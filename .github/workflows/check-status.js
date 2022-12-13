@@ -17,7 +17,7 @@ const sites = [
 /** 通知を行う有効期限日までの残日数 */
 const expireDaysToNotify = {
   domain: 15,  // Freenom の無料ドメインは14日前から更新可能なので大体コレぐらいで…
-  cert  : 20   // XREA 以外は毎月1日に更新する Cron 設定にしてあるので大体コレぐらいで…
+  cert  : 20   // OCI は毎月1日に更新する Cron 設定にしてあるので大体コレぐらいで…
 };
 
 
@@ -29,15 +29,15 @@ const expireDaysToNotify = {
  * 
  * @param {string} url URL
  * @param {object} options オプション
- * @return {Promise<object>} JSON パースしたレスポンス
+ * @return {Promise<string>} レスポンス文字列
+ * @throws リクエストに失敗した時
  */
-function request(url, options) {
+function request(url, options = {}) {
   return new Promise((resolve, reject) => {
-    options = options || {};
     console.log(`Request : [${url}]`, options);
     const agent = url.startsWith('https:') ? https : http;
-    const body = options.body || null;
-    if(options.body) delete options.body;
+    const body = options.body;
+    delete options.body;
     
     const req = agent.request(url, options, (res) => {
       let data = '';
@@ -46,14 +46,7 @@ function request(url, options) {
           data += chunk;
         })
         .on('end', () => {
-          try {
-            console.log('Request : Success', data);
-            resolve(data);
-          }
-          catch(error) {
-            console.error('Request : Failed To JSON Parse', error, data);
-            reject(error);
-          }
+          resolve(data);
         });
     })
       .on('error', (error) => {
@@ -62,7 +55,7 @@ function request(url, options) {
       })
       .on('timeout', () => {
         console.error('Request : Timeout');
-        req.abort();
+        req.destroy();
         reject('Request Timeout');
       })
       .setTimeout(5000);
@@ -75,7 +68,7 @@ function request(url, options) {
 /**
  * 1サイトのステータスを取得する
  * 
- * @param {object} site https と http プロパティで URL 文字列を持つ連想配列
+ * @param {object} site `https` と `http` プロパティで URL 文字列を持つ連想配列
  * @return {object} ヘルス・メッセージ・ステータスを持つ連想配列
  */
 async function fetchInfo(site) {
@@ -139,7 +132,7 @@ function createDate(dateString) {
  * ドメイン・証明書の残日数を取得し、通知の要否を算出する
  * 
  * @param {Date} today 今日日付
- * @param {object} status 各サイトから取得した status.json の連想配列
+ * @param {object} status 各サイトから取得した `status.json` の連想配列
  * @return {object} ドメイン・証明書の残日数と通知要否を表した連想配列
  */
 function diffDate(today, status) {
@@ -156,7 +149,7 @@ function diffDate(today, status) {
     diff.domainShouldNotify = (diff.domainDaysLeft <= expireDaysToNotify.domain);
   }
   
-  // XREA の無料 SSL は有効期限がないので '-' が設定されている
+  // GitHub Pages と XREA は有効期限がない無料 SSL で '-' が設定されているのでスキップする
   if(status.cert_expiry_date && status.cert_expiry_date !== 'UNKNOWN' && status.cert_expiry_date !== '-') {
     const cert = createDate(status.cert_expiry_date);
     diff.certDaysLeft     = Math.floor((cert - today) / 86400000);
@@ -179,11 +172,11 @@ function formatDate(date) {
 }
 
 /**
- * README.md を組み立てる
+ * `README.md` を組み立てる
  * 
  * @param {string} todayString 'YYYY-MM-DD' 形式の今日日付
  * @param {object} infos 各サイトの情報
- * @return {string} README.md の内容
+ * @return {string} `README.md` の内容
  */
 function createReadmeText(todayString, infos) {
   const emoji = {
@@ -196,7 +189,7 @@ function createReadmeText(todayString, infos) {
     + '\n' + infos.reduce((line, info) => line + ` ${info.site.name} |`, '| Name |')
     + '\n' + infos.reduce((line,_info) => line + '---|'                , '|------|')
     + '\n' + infos.reduce((line, info) => line + ` [${info.site.http}](http://${info.site.http}/)`                                        + ' |', '| Global IP                |')
-    + '\n' + infos.reduce((line, info) => line + ` [${info.site.https}](http://${info.site.https}/)`                                      + ' |', '| Domain                   |')
+    + '\n' + infos.reduce((line, info) => line + ` [${info.site.https}](https://${info.site.https}/)`                                     + ' |', '| Domain                   |')
     + '\n' + infos.reduce((line, info) => line + ` ${emoji[info.health]} ${info.health}`                                                  + ' |', '| Health                   |')
     + '\n' + infos.reduce((line, info) => line + ` ${info.message}`                                                                       + ' |', '| Message                  |')
     + '\n' + infos.reduce((line, info) => line + ` ${info.status.domain_registration_date}`                                               + ' |', '| Domain Registration Date |')
@@ -216,26 +209,28 @@ function createReadmeText(todayString, infos) {
 - [GitHub Pages - Site Status](https://neos21.github.io/site-status/)
 `;
   
-  console.log('Readme Text : \n', readmeText);
+  console.log('Readme Text :');
+  console.log(readmeText);
   return readmeText;
 }
 
 /**
- * README.md にテキストを上書き保存する
+ * `README.md` にテキストを上書き保存する
  * 
- * @param {string} readmeText README.md の内容
- * @return {Promise<boolean>} 保存できれば true を返す
+ * @param {string} readmeText `README.md` の内容
+ * @return {Promise<boolean>} 保存できれば `true` を返す
+ * @throws ファイル書き込みに失敗した時
  */
-function updateReadme(readmeText) {
-  return fs.promises.writeFile('./README.md', readmeText, 'utf-8')
-    .then(() => {
-      console.log('Update Readme : Success');
-      return true;
-    })
-    .catch((error) => {
-      console.log('Update Readme : Failed', error);
-      return Promise.reject(error);
-    });
+async function updateReadme(readmeText) {
+  try {
+    await fs.promises.writeFile('./README.md', readmeText, 'utf-8');
+    console.log('Update Readme : Success');
+    return true;
+  }
+  catch(error) {
+    console.log('Update Readme : Failed', error);
+    throw error;
+  }
 }
 
 /**
@@ -248,9 +243,6 @@ function updateReadme(readmeText) {
 function createMessageForSlack(todayString, infos) {
   let message = '';
   infos.forEach((info) => {
-    // GCE は 2021-09-03 から常時稼動させないことにしたのでチェック対象外とする
-    if(info.site.name === 'GCE') return;
-    
     let siteMessage = '';
     if(info.health !== 'OK') {
       siteMessage += `• ヘルス : ${info.health} (${info.message})\n`;
@@ -278,54 +270,63 @@ function createMessageForSlack(todayString, infos) {
  * Slack に通知する
  * 
  * @param {string} message 投稿メッセージ
- * @return {Promise<boolean>} リクエストが成功すれば true を返す
+ * @return {Promise<boolean | Error>} リクエストが成功すれば `true` を返す・失敗時はエラーオブジェクトを返す
  */
-function notifyToSlack(message) {
-  return request(process.env.SLACK_URL, {
-    headers: {
-      'Content-Type': 'application/json; charset=UTF-8'
-    },
-    method: 'POST',
-    body: JSON.stringify({ text: message })
-  })
-    .then((result) => {
-      console.log('Notify To Slack : Success', result);
-      return true;
-    })
-    .catch((error) => {
-      console.warn('Notify To Slack : Failed To Request. Continue', error);
-      return error;
+async function notifyToSlack(message) {
+  try {
+    const response = await request(process.env.SLACK_URL, {
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8'
+      },
+      method: 'POST',
+      body: JSON.stringify({ text: message })
     });
+    console.log('Notify To Slack : Success', response);
+    return true;
+  }
+  catch(error) {
+    console.warn('Notify To Slack : Failed To Request. Continue', error);
+    return error;
+  }
 }
 
 // メイン処理
 (async () => {
-  const today = createDate();  // NOTE : 引数に 'YYYY-MM-DD' 形式の日付を指定することで未来日付でのテストが可能
-  const todayString = formatDate(today);
-  console.log('Today : ', today, todayString);
-  
-  const rawInfos = await Promise.all(sites.map((site) => fetchInfo(site)));
-  const infos = rawInfos.map((info) => {
-    info.diff = diffDate(today, info.status);
-    return info;
-  });
-  console.log('Infos : ', infos);
-  
-  const readmeText = createReadmeText(todayString, infos);
-  await updateReadme(readmeText);  // エラー時はココで中断する
-  
-  if(process.env.SLACK_URL) {
-    const message = createMessageForSlack(todayString, infos);
-    if(message) {
-      await notifyToSlack(message);
+  try {
+    console.log(`[${new Date().toISOString()}] Start`);
+    
+    const today = createDate();  // NOTE : 引数に 'YYYY-MM-DD' 形式の日付を指定することで未来日付でのテストが可能
+    const todayString = formatDate(today);
+    console.log('Today : ', today, todayString);
+    
+    const rawInfos = await Promise.all(sites.map((site) => fetchInfo(site)));  // Throws : レスポンスエラー・タイムアウト時
+    const infos = rawInfos.map((info) => {
+      info.diff = diffDate(today, info.status);
+      return info;
+    });
+    console.log('Infos : ', infos);
+    
+    const readmeText = createReadmeText(todayString, infos);
+    await updateReadme(readmeText);  // Throws : エラー時はココで中断する
+    
+    if(process.env.SLACK_URL) {
+      const message = createMessageForSlack(todayString, infos);
+      if(message) {
+        const result = await notifyToSlack(message);
+        console.log('Notified To Slack', result);
+      }
+      else {
+        console.log('Nothing To Notify To Slack');
+      }
     }
     else {
-      console.log('Nothing To Notify To Slack');
+      console.log('Environment Variable SLACK_URL Is Empty. Skip Notify To Slack');
     }
   }
-  else {
-    console.log('Environment Variable SLACK_URL is empty. Skip Notify To Slack');
+  catch(error) {
+    console.error('An Error Has Occurred', error);
   }
-  
-  console.log('Finished');
+  finally {
+    console.log(`[${new Date().toISOString()}] Finished`);
+  }
 })();
