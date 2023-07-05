@@ -1,20 +1,20 @@
 # Site Status
 
 
-## Last Updated : 2023-07-04
+## Last Updated : 2023-07-05
 
 | Name | Neo's World | Origin | OCI 1 | OCI 2 |
 |------|---|---|---|---|
 | Global IP                | [neos21.github.io/neos21.net](http://neos21.github.io/neos21.net/) | [neo.s21.xrea.com](http://neo.s21.xrea.com/) | [140.238.56.203](http://140.238.56.203/) | [158.101.130.242](http://158.101.130.242/) |
 | Domain                   | [neos21.net](https://neos21.net/) | [neos21.tk](https://neos21.tk/) | [neos21-oci.cf](https://neos21-oci.cf/) | [neos21-oci.ml](https://neos21-oci.ml/) |
-| Health                   | ✅ OK | ✅ OK | ✅ OK | ✅ OK |
-| Message                  | HTTPS Is Alive | HTTPS Is Alive | HTTPS Is Alive | HTTPS Is Alive |
-| Domain Registration Date | 2020-11-01 | 2020-08-22 | 2020-08-22 | 2020-08-22 |
-| Domain Expiry Date       | 2023-11-01 | 2023-08-22 | 2023-08-22 | 2023-08-22 |
-| Domain Days Left         | 120 | 49 | 49 | 49 |
-| Cert Renew Date          | - | - | 2023-07-01 | 2023-07-01 |
-| Cert Expiry Date         | - | - | 2023-08-19 | 2023-08-19 |
-| Cert Days Left           | - | - | 46 | 46 |
+| Health                   | ✅ OK | ✅ OK | ✅ OK | ❌ Error |
+| Message                  | HTTPS Is Alive | HTTPS Is Alive | HTTPS Is Alive | Site May Be Down |
+| Domain Registration Date | 2020-11-01 | 2020-08-22 | 2020-08-22 | UNKNOWN |
+| Domain Expiry Date       | 2023-11-01 | 2023-08-22 | 2023-08-22 | UNKNOWN |
+| Domain Days Left         | 119 | 48 | 48 | - |
+| Cert Renew Date          | - | - | 2023-07-01 | UNKNOWN |
+| Cert Expiry Date         | - | - | 2023-08-19 | UNKNOWN |
+| Cert Days Left           | - | - | 45 | - |
 
 
 ## Links
