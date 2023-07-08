@@ -1,7 +1,7 @@
 # Site Status
 
 
-## Last Updated : 2023-07-07
+## Last Updated : 2023-07-08
 
 | Name | Neo's World | Origin | OCI 1 |
 |------|---|---|---|
@@ -11,10 +11,10 @@
 | Message                  | HTTPS Is Alive | HTTPS Is Alive | HTTPS Is Alive |
 | Domain Registration Date | 2020-11-01 | 2020-08-22 | 2020-08-22 |
 | Domain Expiry Date       | 2023-11-01 | 2023-08-22 | 2023-08-22 |
-| Domain Days Left         | 117 | 46 | 46 |
+| Domain Days Left         | 116 | 45 | 45 |
 | Cert Renew Date          | - | - | 2023-07-01 |
 | Cert Expiry Date         | - | - | 2023-08-19 |
-| Cert Days Left           | - | - | 43 |
+| Cert Days Left           | - | - | 42 |
 
 
 ## Links
