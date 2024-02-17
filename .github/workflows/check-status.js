@@ -9,8 +9,6 @@ const https = require('https');
 /** サイト定義 */
 const sites = [
   { name: "Neo's World", https: 'neos21.net'    , http: 'neos21.github.io/neos21.net', statusJsonPath: '/status.json' },
-  { name: "Origin"     , https: 'neos21.tk'     , http: 'neo.s21.xrea.com'           , statusJsonPath: '/status.json' },
-  { name: 'OCI 1'      , https: 'neos21-oci.cf' , http: '140.238.56.203'             , statusJsonPath: '/status.json' },
   { name: 'OCI 2'      , https: 'app.neos21.net', http: '158.101.130.242'            , statusJsonPath: '/status.json' }
 ];
 
