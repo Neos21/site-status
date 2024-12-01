@@ -8,8 +8,11 @@ const https = require('https');
 
 /** サイト定義 */
 const sites = [
-  { name: "Neo's World", https: 'neos21.net'    , http: 'neos21.github.io/neos21.net', statusJsonPath: '/status.json' },
-  { name: 'OCI 2'      , https: 'app.neos21.net', http: '158.101.130.242'            , statusJsonPath: '/status.json' }
+  { name: "Neo's World"   , https:        'neos21.net', http: 'neos21.github.io/neos21.net', statusJsonPath: '/status.json' },
+  { name: "Neo's App"     , https:    'app.neos21.net', http: '158.101.130.242'            , statusJsonPath: '/status.json' },
+  { name: 'DB API'        , https: 'db-api.neos21.net', http: '158.101.130.242'            , statusJsonPath: '/status.json' },
+  { name: 'Access Counter', https:     'ct.neos21.net', http: '158.101.130.242'            , statusJsonPath: '/status.json' },
+  { name: 'Zarigani Cat'  , https:   'nnkp.neos21.net', http: '158.101.130.242'            , statusJsonPath: '/status.json' },
 ];
 
 /** 通知を行う有効期限日までの残日数 */
@@ -82,22 +85,7 @@ async function fetchInfo(site) {
     };
   }
   catch(error) {
-    console.warn('Fetch Status : Failed To Fetch With HTTPS. Continue With HTTP', error);
-  }
-  
-  try {
-    const rawHttpStatus = await request(`http://${site.http}${site.statusJsonPath}`);
-    const httpStatus = JSON.parse(rawHttpStatus);
-    console.log('Fetch Status : Success With HTTP (Warning)', httpStatus);
-    return {
-      site   : site,
-      health : 'Warning',
-      message: 'HTTPS May Be Down',
-      status : httpStatus
-    };
-  }
-  catch(error) {
-    console.error('Fetch Status : Failed To Fetch With HTTP. Site May Be Down (Error)', error);
+    console.error('Fetch Status : Failed To Fetch With HTTPS. Site May Be Down (Error)', error);
     return {
       site   : site,
       health : 'Error',
@@ -110,6 +98,32 @@ async function fetchInfo(site) {
       }
     };
   }
+  
+  //try {
+  //  const rawHttpStatus = await request(`http://${site.http}${site.statusJsonPath}`);
+  //  const httpStatus = JSON.parse(rawHttpStatus);
+  //  console.log('Fetch Status : Success With HTTP (Warning)', httpStatus);
+  //  return {
+  //    site   : site,
+  //    health : 'Warning',
+  //    message: 'HTTPS May Be Down',
+  //    status : httpStatus
+  //  };
+  //}
+  //catch(error) {
+  //  console.error('Fetch Status : Failed To Fetch With HTTP. Site May Be Down (Error)', error);
+  //  return {
+  //    site   : site,
+  //    health : 'Error',
+  //    message: 'Site May Be Down',
+  //    status : {
+  //      domain_registration_date: 'UNKNOWN',
+  //      domain_expiry_date      : 'UNKNOWN',
+  //      cert_renew_date         : 'UNKNOWN',
+  //      cert_expiry_date        : 'UNKNOWN'
+  //    }
+  //  };
+  //}
 }
 
 /**
