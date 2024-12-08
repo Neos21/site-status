@@ -1,7 +1,7 @@
 # Site Status
 
 
-## Last Updated : 2024-12-07
+## Last Updated : 2024-12-08
 
 | Name | Neo's World | Neo's App | DB API | Access Counter | Zarigani Cat |
 |------|---|---|---|---|---|
@@ -11,10 +11,10 @@
 | Message                  | HTTPS Is Alive | HTTPS Is Alive | HTTPS Is Alive | HTTPS Is Alive | HTTPS Is Alive |
 | Domain Registration Date | 2020-11-01 | 2020-07-24 | 2024-09-25 | 2024-10-21 | 2024-12-01 |
 | Domain Expiry Date       | 2025-11-01 | 2099-07-24 | 2099-09-25 | 2099-09-25 | 2099-12-01 |
-| Domain Days Left         | 329 | 27257 | 27320 | 27320 | 27387 |
+| Domain Days Left         | 328 | 27256 | 27319 | 27319 | 27386 |
 | Cert Renew Date          | - | 2024-10-09 | 2024-09-25 | 2024-10-21 | 2024-12-01 |
-| Cert Expiry Date         | - | 2025-01-08 | 2024-12-23 | 2025-01-18 | 2025-03-01 |
-| Cert Days Left           | - | 32 | ⚠️ 16 | 42 | 84 |
+| Cert Expiry Date         | - | 2025-01-08 | 2025-02-28 | 2025-01-18 | 2025-03-01 |
+| Cert Days Left           | - | 31 | 82 | 41 | 83 |
 
 
 ## Links
