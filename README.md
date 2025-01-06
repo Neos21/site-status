@@ -1,7 +1,7 @@
 # Site Status
 
 
-## Last Updated : 2025-01-05
+## Last Updated : 2025-01-06
 
 | Name | Neo's World | Neo's App | DB API | Access Counter | Zarigani Cat | Favoriya | Favoriya OSS |
 |------|---|---|---|---|---|---|---|
@@ -11,10 +11,10 @@
 | Message                  | HTTPS Is Alive | HTTPS Is Alive | HTTPS Is Alive | HTTPS Is Alive | HTTPS Is Alive | HTTPS Is Alive | HTTPS Is Alive |
 | Domain Registration Date | 2020-11-01 | 2020-07-24 | 2024-09-25 | 2024-10-21 | 2024-12-01 | 2024-12-19 | 2024-12-19 |
 | Domain Expiry Date       | 2025-11-01 | 2099-07-24 | 2099-09-25 | 2099-10-21 | 2099-12-01 | 2099-12-19 | 2099-12-19 |
-| Domain Days Left         | 300 | 27228 | 27291 | 27317 | 27358 | 27376 | 27376 |
+| Domain Days Left         | 299 | 27227 | 27290 | 27316 | 27357 | 27375 | 27375 |
 | Cert Renew Date          | - | 2024-12-31 | 2024-09-25 | 2024-12-31 | 2024-12-01 | 2024-12-19 | 2024-12-19 |
 | Cert Expiry Date         | - | 2025-03-31 | 2025-02-28 | 2025-03-31 | 2025-03-01 | 2025-03-19 | 2025-03-19 |
-| Cert Days Left           | - | 85 | 54 | 85 | 55 | 73 | 73 |
+| Cert Days Left           | - | 84 | 53 | 84 | 54 | 72 | 72 |
 
 
 ## Links
