@@ -10,8 +10,6 @@ const https = require('https');
 const sites = [
   { name: "Neo's World"   , https:              'neos21.net', http: 'neos21.github.io/neos21.net', statusJsonPath: '/status.json' },
   { name: "Neo's App"     , https:          'app.neos21.net', http: '158.101.130.242'            , statusJsonPath: '/status.json' },
-  { name: 'DB API'        , https:       'db-api.neos21.net', http: '158.101.130.242'            , statusJsonPath: '/status.json' },
-  { name: 'Access Counter', https:           'ct.neos21.net', http: '158.101.130.242'            , statusJsonPath: '/status.json' },
   { name: 'Zarigani Cat'  , https:         'nnkp.neos21.net', http: '158.101.130.242'            , statusJsonPath: '/status.json' },
   { name: 'Favoriya'      , https:     'favoriya.neos21.net', http: '140.238.56.203'             , statusJsonPath: '/status.json' },
   { name: 'Favoriya OSS'  , https: 'oss.favoriya.neos21.net', http: '140.238.56.203'             , statusJsonPath: '/status.json' }
