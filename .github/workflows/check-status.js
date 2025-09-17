@@ -8,11 +8,8 @@ const https = require('https');
 
 /** サイト定義 */
 const sites = [
-  { name: "Neo's World"   , https:              'neos21.net', http: 'neos21.github.io/neos21.net', statusJsonPath: '/status.json' },
-  { name: "Neo's App"     , https:          'app.neos21.net', http: '158.101.130.242'            , statusJsonPath: '/status.json' },
-  { name: 'Zarigani Cat'  , https:         'nnkp.neos21.net', http: '158.101.130.242'            , statusJsonPath: '/status.json' },
-  { name: 'Favoriya'      , https:     'favoriya.neos21.net', http: '140.238.56.203'             , statusJsonPath: '/status.json' },
-  { name: 'Favoriya OSS'  , https: 'oss.favoriya.neos21.net', http: '140.238.56.203'             , statusJsonPath: '/status.json' }
+  { name: "Neo's World", https:     'neos21.net', http: 'neos21.github.io/neos21.net', statusJsonPath: '/status.json' },
+  { name: "Neo's App"  , https: 'app.neos21.net', http: '158.101.130.242'            , statusJsonPath: '/status.json' }
 ];
 
 /** 通知を行う有効期限日までの残日数 */
