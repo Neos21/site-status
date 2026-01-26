@@ -1,7 +1,7 @@
 # Site Status
 
 
-## Last Updated : 2026-01-25
+## Last Updated : 2026-01-26
 
 | Name | Neo's World | Neo's App |
 |------|---|---|
@@ -11,10 +11,10 @@
 | Message                  | HTTPS Is Alive | HTTPS Is Alive |
 | Domain Registration Date | 2020-11-01 | 2020-07-24 |
 | Domain Expiry Date       | 2026-11-01 | 2099-07-24 |
-| Domain Days Left         | 280 | 26843 |
+| Domain Days Left         | 279 | 26842 |
 | Cert Renew Date          | - | 2025-12-01 |
 | Cert Expiry Date         | - | 2026-03-31 |
-| Cert Days Left           | - | 65 |
+| Cert Days Left           | - | 64 |
 
 
 ## Links
