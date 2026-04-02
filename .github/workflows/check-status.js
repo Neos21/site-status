@@ -276,6 +276,42 @@ function createMessageForSlack(todayString, infos) {
 }
 
 /**
+ * Slack Web API を叩く
+ * 
+ * @param {string} method API メソッド (例: `chat.postMessage`)
+ * @param {object} payload リクエストペイロード
+ * @param {string} token Bot Token
+ * @return {Promise<object>} API レスポンス
+ * @throws API エラー時
+ */
+async function slackApi(method, payload, token) {
+  const response = await request(`https://slack.com/api/${method}`, {
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      Authorization: `Bearer ${token}`
+    },
+    method: 'POST',
+    body: JSON.stringify(payload)
+  });
+  
+  let json = {};
+  try {
+    json = JSON.parse(response);
+  }
+  catch(error) {
+    console.error('Slack API : Failed To Parse Response', response);
+    throw error;
+  }
+  
+  if(!json.ok) {
+    console.error('Slack API : Error', json);
+    throw json;
+  }
+  
+  return json;
+}
+
+/**
  * Slack に通知する
  * 
  * @param {string} message 投稿メッセージ
@@ -283,13 +319,15 @@ function createMessageForSlack(todayString, infos) {
  */
 async function notifyToSlack(message) {
   try {
-    const response = await request(process.env.SLACK_URL, {
-      headers: {
-        'Content-Type': 'application/json; charset=UTF-8'
-      },
-      method: 'POST',
-      body: JSON.stringify({ text: message })
-    });
+    const dm = await slackApi('conversations.open', {
+      users: process.env.SLACK_DM_USER
+    }, process.env.SLACK_BOT_TOKEN);
+    
+    const response = await slackApi('chat.postMessage', {
+      channel: dm.channel.id,
+      text: message
+    }, process.env.SLACK_BOT_TOKEN);
+    
     console.log('Notify To Slack : Success', response);
     return true;
   }
@@ -318,9 +356,10 @@ async function notifyToSlack(message) {
     const readmeText = createReadmeText(todayString, infos);
     await updateReadme(readmeText);  // Throws : エラー時はココで中断する
     
-    if(process.env.SLACK_URL) {
+    // Bot Token + DM User ID を確認して DM 送信する
+    if(process.env.SLACK_BOT_TOKEN != null && process.env.SLACK_DM_USER != null) {
       const message = createMessageForSlack(todayString, infos);
-      if(message) {
+      if(message !== '') {
         const result = await notifyToSlack(message);
         console.log('Notified To Slack', result);
       }
@@ -329,7 +368,7 @@ async function notifyToSlack(message) {
       }
     }
     else {
-      console.log('Environment Variable SLACK_URL Is Empty. Skip Notify To Slack');
+      console.log('Environment Variable SLACK_BOT_TOKEN Or SLACK_DM_USER Is Empty. Skip Notify To Slack');
     }
   }
   catch(error) {

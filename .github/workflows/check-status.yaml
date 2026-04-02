@@ -9,14 +9,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v6
       - name: Use Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v6
         with:
-          node-version: '16.x'
+          node-version: latest
       - name: Check Status
         env :
-          SLACK_URL: ${{ secrets.SLACK_URL }}
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_DM_USER: ${{ secrets.SLACK_DM_USER }}
         run : |
           node ./.github/workflows/check-status.js
       - name: Commit README.md
